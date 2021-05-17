@@ -2,11 +2,11 @@ cmake_policy(SET CMP0091 NEW)
 set(CMAKE_POLICY_DEFAULT_CMP0091 NEW)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-project(waifu2x-ncnn-vulkan)
+project(Waifu2x-Vulkan-Library)
 
 cmake_minimum_required(VERSION 3.9)
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE MinSizeRel)
 
 option(USE_SYSTEM_NCNN "build with system libncnn" OFF)
 option(USE_SYSTEM_WEBP "build with system libwebp" OFF)
@@ -226,9 +226,9 @@ waifu2x_add_shader(waifu2x_postproc_tta.comp)
 
 add_custom_target(generate-spirv DEPENDS ${SHADER_SPV_HEX_FILES})
 
-add_library(waifu2x-ncnn-vulkan SHARED main.cpp waifu2x.cpp wrapper.h)
+add_library(Waifu2x-Vulkan-Library SHARED main.cpp waifu2x.cpp wrapper.h)
 
-add_dependencies(waifu2x-ncnn-vulkan generate-spirv)
+add_dependencies(Waifu2x-Vulkan-Library generate-spirv)
 
 set(WAIFU2X_LINK_LIBRARIES ncnn webp ${Vulkan_LIBRARY})
 
@@ -254,4 +254,4 @@ if(USE_STATIC_MOLTENVK)
     )
 endif()
 
-target_link_libraries(waifu2x-ncnn-vulkan ${WAIFU2X_LINK_LIBRARIES})
+target_link_libraries(Waifu2x-Vulkan-Library ${WAIFU2X_LINK_LIBRARIES})

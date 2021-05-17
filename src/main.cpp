@@ -102,7 +102,7 @@ static std::vector<int> parse_optarg_int_array(const char* optarg)
 /*
 static void print_usage()
 {
-    fprintf(stdout, "Usage: waifu2x-ncnn-vulkan -i infile -o outfile [options]...\n\n");
+    fprintf(stdout, "Usage: Waifu2x-Vulkan-Library -i infile -o outfile [options]...\n\n");
     fprintf(stdout, "  -h                   show this help\n");
     fprintf(stdout, "  -v                   verbose output\n");
     fprintf(stdout, "  -i input-path        input image path (jpg/png/webp) or directory\n");
