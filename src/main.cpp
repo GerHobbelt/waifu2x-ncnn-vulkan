@@ -1,6 +1,6 @@
 // waifu2x implemented with ncnn library
 
-#include <stdio.h>
+#include <cstdio>
 #include <algorithm>
 #include <queue>
 #include <vector>
@@ -25,9 +25,9 @@
 #include "webp_image.h"
 
 #if _WIN32
-#include <wchar.h>
+#include <cwchar>
 #include "wrapper.h"
-static wchar_t* optarg = NULL;
+static wchar_t* optarg = nullptr;
 static int optind = 1;
 /*
 static wchar_t getopt(int argc, wchar_t* const argv[], const wchar_t* optstring)
@@ -98,7 +98,6 @@ static std::vector<int> parse_optarg_int_array(const char* optarg)
 
 #include "waifu2x.h"
 
-#include "filesystem_utils.h"
 /*
 static void print_usage()
 {
@@ -203,7 +202,7 @@ void* load(void* args)
 
         int webp = 0;
 
-        unsigned char* pixeldata = 0;
+        unsigned char* pixeldata = nullptr;
         int w;
         int h;
         int c;
@@ -216,8 +215,8 @@ void* load(void* args)
         if (fp)
         {
             // read whole file
-            unsigned char* filedata = 0;
-            int length = 0;
+            unsigned char* filedata;
+            int length;
             {
                 fseek(fp, 0, SEEK_END);
                 length = ftell(fp);
@@ -303,7 +302,7 @@ void* load(void* args)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 class ProcThreadParams
@@ -366,7 +365,7 @@ void* proc(void* args)
         tosave.put(v);
     }
 
-    return 0;
+    return nullptr;
 }
 
 class SaveThreadParams
@@ -451,7 +450,7 @@ void* save(void* args)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 /**
@@ -985,10 +984,12 @@ int main(int argc, char** argv)
 
 //导出class声明参见wrapper.h
 void Waifu2xWrapper::setInput(path_t input) {
+    printf("Your Input: %ls", input.c_str());
     inputpath=std::move(input);
 }
 
 void Waifu2xWrapper::setOutput(path_t output) {
+    printf("Your Output: %ls", output.c_str());
     outputpath=std::move(output);
 }
 
@@ -1005,6 +1006,7 @@ void Waifu2xWrapper::setTileSize(std::vector<int> size) {
 }
 
 void Waifu2xWrapper::setModel(path_t p_model) {
+    printf("Your Model: %ls", p_model.c_str());
     this->model=std::move(p_model);
 }
 
@@ -1029,6 +1031,7 @@ void Waifu2xWrapper::setTtaMode(int mode) {
 }
 
 void Waifu2xWrapper::setFormat(path_t p_format) {
+    printf("Your Format: %ls", p_format.c_str());
     this->format=std::move(p_format);
 }
 
@@ -1447,7 +1450,7 @@ Waifu2xWrapper::Waifu2xWrapper() {
     tta_mode=0;
     format= PATHSTR("png");
 #if _WIN32
-    CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 #endif
     ncnn::create_gpu_instance();
 }
