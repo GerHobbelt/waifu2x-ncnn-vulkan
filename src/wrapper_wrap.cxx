@@ -861,7 +861,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Waifu2xWrapper() {
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setInput(void * jarg1, char * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setInput(void * jarg1, const wchar_t *jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
@@ -875,7 +875,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setInput(void * jarg1, char * 
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setOutput(void * jarg1, char * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setOutput(void * jarg1, const wchar_t *jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
@@ -925,7 +925,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setTileSize(void * jarg1, void
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setModel(void * jarg1, char * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setModel(void * jarg1, const wchar_t *jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
@@ -1001,7 +1001,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setTtaMode(void * jarg1, int j
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setFormat(void * jarg1, char * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setFormat(void * jarg1, const wchar_t *jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
