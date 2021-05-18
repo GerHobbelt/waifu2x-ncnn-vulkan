@@ -1000,7 +1000,7 @@ void Waifu2xWrapper::setScale(int p_scale) {
     this->scale=p_scale;
 }
 
-void Waifu2xWrapper::setTilesize(std::vector<int> size) {
+void Waifu2xWrapper::setTileSize(std::vector<int> size) {
     this->tilesize=std::move(size);
 }
 

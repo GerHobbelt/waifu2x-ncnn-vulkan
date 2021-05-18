@@ -17,7 +17,7 @@ public:
     void setOutput(path_t output);
     void setNoise(int p_noise);
     void setScale(int p_scale);
-    void setTilesize(std::vector<int> size);
+    void setTileSize(std::vector<int> size);
     void setModel(path_t p_model);
     void setGpu(std::vector<int> gpu);
     void setJobsLoad(int load);
