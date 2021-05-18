@@ -3,8 +3,8 @@
 #include "wrapper.h"
 %}
 
-%include "std_string.i"
-typedef std::string path_t;
+%include "std_wstring.i"
+typedef std::wstring path_t;
 
 %include "std_vector.i"
 namespace std {

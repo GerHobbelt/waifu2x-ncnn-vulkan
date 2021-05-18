@@ -299,6 +299,19 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_libWaifu2x(SWIG_CSharpStr
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, msg, ""); return nullreturn; } else
 
 
+/* Callback for returning strings to C# without leaking memory */
+typedef void * (SWIGSTDCALL* SWIG_CSharpWStringHelperCallback)(const wchar_t *);
+static SWIG_CSharpWStringHelperCallback SWIG_csharp_wstring_callback = NULL;
+
+
+#ifdef __cplusplus
+extern "C"
+#endif
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterWStringCallback_libWaifu2x(SWIG_CSharpWStringHelperCallback callback) {
+  SWIG_csharp_wstring_callback = callback;
+}
+
+
 #include "wrapper.h"
 
 
@@ -861,13 +874,13 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Waifu2xWrapper() {
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setInput(void * jarg1, const wchar_t *jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setInput(void * jarg1, wchar_t * jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
   arg1 = (Waifu2xWrapper *)jarg1; 
   if (!jarg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null wstring", 0);
     return ;
   }
   (&arg2)->assign(jarg2); 
@@ -875,13 +888,13 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setInput(void * jarg1, const w
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setOutput(void * jarg1, const wchar_t *jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setOutput(void * jarg1, wchar_t * jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
   arg1 = (Waifu2xWrapper *)jarg1; 
   if (!jarg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null wstring", 0);
     return ;
   }
   (&arg2)->assign(jarg2); 
@@ -925,13 +938,13 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setTileSize(void * jarg1, void
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setModel(void * jarg1, const wchar_t *jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setModel(void * jarg1, wchar_t * jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
   arg1 = (Waifu2xWrapper *)jarg1; 
   if (!jarg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null wstring", 0);
     return ;
   }
   (&arg2)->assign(jarg2); 
@@ -1001,13 +1014,13 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setTtaMode(void * jarg1, int j
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setFormat(void * jarg1, const wchar_t *jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_Waifu2xWrapper_setFormat(void * jarg1, wchar_t * jarg2) {
   Waifu2xWrapper *arg1 = (Waifu2xWrapper *) 0 ;
   path_t arg2 ;
   
   arg1 = (Waifu2xWrapper *)jarg1; 
   if (!jarg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null wstring", 0);
     return ;
   }
   (&arg2)->assign(jarg2); 

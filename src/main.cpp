@@ -984,12 +984,12 @@ int main(int argc, char** argv)
 
 //导出class声明参见wrapper.h
 void Waifu2xWrapper::setInput(path_t input) {
-    printf("Your Input: %ls", input.c_str());
+    printf("Your Input: %ls \n", input.c_str());
     inputpath=std::move(input);
 }
 
 void Waifu2xWrapper::setOutput(path_t output) {
-    printf("Your Output: %ls", output.c_str());
+    printf("Your Output: %ls \n", output.c_str());
     outputpath=std::move(output);
 }
 
@@ -1006,7 +1006,7 @@ void Waifu2xWrapper::setTileSize(std::vector<int> size) {
 }
 
 void Waifu2xWrapper::setModel(path_t p_model) {
-    printf("Your Model: %ls", p_model.c_str());
+    printf("Your Model: %ls \n", p_model.c_str());
     this->model=std::move(p_model);
 }
 
@@ -1031,7 +1031,7 @@ void Waifu2xWrapper::setTtaMode(int mode) {
 }
 
 void Waifu2xWrapper::setFormat(path_t p_format) {
-    printf("Your Format: %ls", p_format.c_str());
+    printf("Your Format: %ls \n", p_format.c_str());
     this->format=std::move(p_format);
 }
 
@@ -1444,7 +1444,7 @@ Waifu2xWrapper::Waifu2xWrapper() {
     verbose =0;
     noise = 0;
     scale =2;
-    model= PATHSTR("models-cunet");
+    model= PATHSTR("models/models-cunet");
     jobs_load=1;
     jobs_save=2;
     tta_mode=0;
