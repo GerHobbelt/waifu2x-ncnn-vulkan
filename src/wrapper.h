@@ -8,7 +8,8 @@
 #define WAIFU2X_NCNN_VULKAN_WRAPPER_H
 
 #endif //WAIFU2X_NCNN_VULKAN_WRAPPER_H
-class _declspec(dllexport) Waifu2xWrapper
+//class _declspec(dllexport) Waifu2xWrapper
+class Waifu2xWrapper
 {
 public:
     ~Waifu2xWrapper();
