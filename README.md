@@ -59,12 +59,15 @@ If you encounter a crash or error, try upgrading your GPU driver:
 
 1. Download and setup the Vulkan SDK from https://vulkan.lunarg.com/
   - For Linux distributions, you can either get the essential build requirements from package manager
+
 ```shell
 dnf install vulkan-headers vulkan-loader-devel
 ```
+
 ```shell
 apt-get install libvulkan-dev
 ```
+
 ```shell
 pacman -S vulkan-headers vulkan-icd-loader
 ```
