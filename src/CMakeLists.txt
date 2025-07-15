@@ -3,8 +3,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0091 NEW)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 project(waifu2x-ncnn-vulkan)
-
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE release CACHE STRING "Choose the type of build" FORCE)
@@ -16,7 +15,6 @@ option(USE_STATIC_MOLTENVK "link moltenvk static library" OFF)
 
 find_package(Threads)
 find_package(OpenMP)
-find_package(Vulkan REQUIRED)
 
 macro(waifu2x_add_shader SHADER_SRC)
     get_filename_component(SHADER_SRC_NAME_WE ${SHADER_SRC} NAME_WE)
@@ -54,28 +52,39 @@ else()
 endif()
 
 if(USE_SYSTEM_NCNN)
-    set(GLSLANG_TARGET_DIR "GLSLANG-NOTFOUND" CACHE PATH "Absolute path to glslangTargets.cmake directory")
-    if(NOT GLSLANG_TARGET_DIR AND NOT DEFINED ENV{GLSLANG_TARGET_DIR})
-        message(WARNING "GLSLANG_TARGET_DIR must be defined! USE_SYSTEM_NCNN will be turned off.")
-        set(USE_SYSTEM_NCNN OFF)
+    find_package(Threads)
+    find_package(SPIRV-Tools QUIET)
+    find_package(SPIRV-Tools-opt QUIET)
+    find_package(glslang QUIET)
+    if(glslang_FOUND)
+        add_library(glslang ALIAS glslang::glslang)
+        add_library(SPIRV ALIAS glslang::SPIRV)
     else()
-        message(STATUS "Using glslang install located at ${GLSLANG_TARGET_DIR}")
-
-        find_package(Threads)
-
-        include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")
-        include("${GLSLANG_TARGET_DIR}/OGLCompilerTargets.cmake")
-        if(EXISTS "${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
-            # hlsl support can be optional
-            include("${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
-        endif()
-        include("${GLSLANG_TARGET_DIR}/glslangTargets.cmake")
-        include("${GLSLANG_TARGET_DIR}/SPIRVTargets.cmake")
-
-        if (NOT TARGET glslang OR NOT TARGET SPIRV)
-            message(WARNING "glslang or SPIRV target not found! USE_SYSTEM_NCNN will be turned off.")
+        set(GLSLANG_TARGET_DIR "GLSLANG-NOTFOUND" CACHE PATH "Absolute path to glslangTargets.cmake directory")
+        if(NOT GLSLANG_TARGET_DIR AND NOT DEFINED ENV{GLSLANG_TARGET_DIR})
+            message(WARNING "set glslang_DIR to glslang-config.cmake directory for using system glslang.")
+            message(WARNING "GLSLANG_TARGET_DIR must be defined! USE_SYSTEM_NCNN will be turned off.")
             set(USE_SYSTEM_NCNN OFF)
+        else()
+            include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")
+            include("${GLSLANG_TARGET_DIR}/OGLCompilerTargets.cmake")
+            if(EXISTS "${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+                # hlsl support can be optional
+                include("${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+            endif()
+            include("${GLSLANG_TARGET_DIR}/glslangTargets.cmake")
+            include("${GLSLANG_TARGET_DIR}/SPIRVTargets.cmake")
         endif()
+    endif()
+
+    if(TARGET glslang AND TARGET SPIRV)
+        get_property(glslang_location TARGET glslang PROPERTY LOCATION)
+        get_property(SPIRV_location TARGET SPIRV PROPERTY LOCATION)
+        message(STATUS "Found glslang: ${glslang_location} (found version \"${glslang_VERSION}\")")
+        message(STATUS "Found SPIRV: ${SPIRV_location} (found version \"${glslang_VERSION}\")")
+    else()
+        message(WARNING "glslang or SPIRV target not found! USE_SYSTEM_NCNN will be turned off.")
+        set(USE_SYSTEM_NCNN OFF)
     endif()
 endif()
 
@@ -98,7 +107,7 @@ if(NOT USE_SYSTEM_NCNN)
     option(NCNN_PIXEL_AFFINE "" OFF)
     option(NCNN_PIXEL_DRAWING "" OFF)
     option(NCNN_VULKAN "" ON)
-    option(NCNN_VULKAN_ONLINE_SPIRV "" ON)
+    option(NCNN_SIMPLEVK "" ON)
     option(NCNN_BUILD_BENCHMARK "" OFF)
     option(NCNN_BUILD_TESTS "" OFF)
     option(NCNN_BUILD_TOOLS "" OFF)
@@ -106,6 +115,7 @@ if(NOT USE_SYSTEM_NCNN)
     option(NCNN_DISABLE_RTTI "" ON)
     option(NCNN_DISABLE_EXCEPTION "" ON)
     option(NCNN_INT8 "" OFF)
+    option(NCNN_BF16 "" OFF)
 
     option(WITH_LAYER_absval "" OFF)
     option(WITH_LAYER_argmax "" OFF)
@@ -201,6 +211,19 @@ if(NOT USE_SYSTEM_NCNN)
     option(WITH_LAYER_deconvolutiondepthwise3d "" OFF)
     option(WITH_LAYER_einsum "" OFF)
     option(WITH_LAYER_deformableconv2d "" OFF)
+    option(WITH_LAYER_glu "" OFF)
+    option(WITH_LAYER_fold "" OFF)
+    option(WITH_LAYER_unfold "" OFF)
+    option(WITH_LAYER_gridsample "" OFF)
+    option(WITH_LAYER_cumulativesum "" OFF)
+    option(WITH_LAYER_copyto "" OFF)
+    option(WITH_LAYER_erf "" OFF)
+    option(WITH_LAYER_diag "" OFF)
+    option(WITH_LAYER_celu "" OFF)
+    option(WITH_LAYER_shrink "" OFF)
+    option(WITH_LAYER_rmsnorm "" OFF)
+    option(WITH_LAYER_spectrogram "" OFF)
+    option(WITH_LAYER_inversespectrogram "" OFF)
 
     add_subdirectory(ncnn)
 endif()
@@ -246,11 +269,15 @@ waifu2x_add_shader(waifu2x_postproc_tta.comp)
 
 add_custom_target(generate-spirv DEPENDS ${SHADER_SPV_HEX_FILES})
 
+if(MINGW)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -municode")
+endif()
+
 add_executable(waifu2x-ncnn-vulkan main.cpp waifu2x.cpp)
 
 add_dependencies(waifu2x-ncnn-vulkan generate-spirv)
 
-set(WAIFU2X_LINK_LIBRARIES ncnn webp ${Vulkan_LIBRARY})
+set(WAIFU2X_LINK_LIBRARIES ncnn webp)
 
 if(USE_STATIC_MOLTENVK)
     find_library(CoreFoundation NAMES CoreFoundation)
@@ -263,6 +290,7 @@ if(USE_STATIC_MOLTENVK)
     find_library(IOSurface NAMES IOSurface)
 
     list(APPEND WAIFU2X_LINK_LIBRARIES
+        ${Vulkan_LIBRARY}
         ${Metal}
         ${QuartzCore}
         ${CoreGraphics}
