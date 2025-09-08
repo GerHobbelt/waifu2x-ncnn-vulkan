@@ -493,8 +493,8 @@ STBIDEF void stbi_set_flip_vertically_on_load_thread(int flag_true_if_should_fli
 
 // ZLIB client - used by PNG, available for other purposes
 
-STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, int *outlen);
-STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header);
+STBIDEF char *stbi_zlib_decode_malloc_guesssize(const void *buffer, int len, int initial_size, int *outlen);
+STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const void *buffer, int len, int initial_size, int *outlen, int parse_header);
 STBIDEF char *stbi_zlib_decode_malloc(const char *buffer, int len, int *outlen);
 STBIDEF int   stbi_zlib_decode_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
 
